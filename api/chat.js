@@ -14,16 +14,13 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
-
+    const data = await re
     const reply =
       data?.[0]?.generated_text ||
       data?.generated_text ||
-      "Sorry, I couldn’t reply.";
-
+      "Sorry, I
     res.status(200).json({ reply });
   } catch (error) {
-    console.error("Error connecting to Hugging Face:", error);
-    res.status(500).json({ reply: "Error connecting to AI." });
-  }
+    console("Error connecting to Hugging Face:", error);
+    res.status(50
 }
