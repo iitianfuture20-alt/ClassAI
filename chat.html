@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassAI Chat</title>
+  <style>
+    body {
+      background-color: #f3f4f6;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .chat-box {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      outline: none;
+    }
+    button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Ask me anything..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://api-inference.huggingface.co/models/gpt2";
+    const HF_TOKEN = "Bearer YOUR_HUGGINGFACE_TOKEN"; // replace with your real token
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const message = input.value.trim();
+      if (!message) return;
+
+      const messages = document.getElementById("messages");
+      messages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+      input.value = "";
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": HF_TOKEN,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ inputs: message }),
+      });
+
+      const data = await response.json();
+      const botReply = data[0]?.generated_text || "Sorry, I couldn’t reply.";
+      messages.innerHTML += `<p><strong>ClassAI:</strong> ${botReply}</p>`;
+    }
+  </script>
+</body>
+</html>
