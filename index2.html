@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ClassAI Chat</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f5f5f5;
+      text-align: center;
+      margin-top: 60px;
+    }
+    #chatbox {
+      width: 80%;
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 70%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 ClassAI Chat</h1>
+  <div id="chatbox">
+    <p><b>Bot:</b> Hello! I'm ClassAI. Ask me anything!</p>
+  </div>
+  <br/>
+  <input type="text" id="userInput" placeholder="Type your message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    function sendMessage() {
+      const userInput = document.getElementById('userInput').value;
+      const chatbox = document.getElementById('chatbox');
+      if (!userInput.trim()) return;
+
+      chatbox.innerHTML += `<p><b>You:</b> ${userInput}</p>`;
+      document.getElementById('userInput').value = "";
+
+      // Basic reply (you can later connect this to an API)
+      setTimeout(() => {
+        const reply = "Interesting! Let's learn AI together.";
+        chatbox.innerHTML += `<p><b>Bot:</b> ${reply}</p>`;
+      }, 500);
+    }
+  </script>
+</body>
+</html>
