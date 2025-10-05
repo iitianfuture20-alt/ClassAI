@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClassAI Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h2 {
+      color: #4f46e5;
+    }
+    .chat-box {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      height: 70vh;
+      border-radius: 20px;
+      padding: 20px;
+      overflow-y: auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .input-area {
+      display: flex;
+      margin-top: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    button {
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>🤖 ClassAI Chat</h2>
+  <div class="chat-box" id="chat"></div>
+  <div class="input-area">
+    <input id="userInput" type="text" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chat = document.getElementById("chat");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      chat.innerHTML += `<p><b>You:</b> ${userMessage}</p>`;
+      input.value = "";
+
+      chat.innerHTML += `<p><i>Thinking...</i></p>`;
+      chat.scrollTop = chat.scrollHeight;
+
+      const res = await fetch("https://api-inference.huggingface.co/models/gpt2", {
+        headers: {
+          Authorization: "Bearer YOUR_HUGGINGFACE_API_KEY"
+        },
+        method: "POST",
+        body: JSON.stringify({ inputs: userMessage }),
+      });
+
+      const data = await res.json();
+      chat.lastChild.remove();
+      chat.innerHTML += `<p><b>ClassAI:</b> ${data[0]?.generated_text || "Sorry, no reply."}</p>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
